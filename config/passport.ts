@@ -17,9 +17,13 @@ passport.use(
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
-        let user = await prisma.user.findUnique({
-          where: { googleId: profile.id },
-        });
+        let user =
+          (await prisma.user.findUnique({
+            where: { googleId: profile.id },
+          })) ||
+          (await prisma.user.findUnique({
+            where: { email: profile.emails?.[0]?.value || "" },
+          }));
 
         if (!user) {
           user = await prisma.user.create({

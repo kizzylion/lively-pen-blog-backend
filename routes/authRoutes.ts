@@ -3,8 +3,10 @@ import passport from "../config/passport";
 import {
   googleCallback,
   logout,
-  localCallback,
   register,
+  login,
+  me,
+  refreshToken,
 } from "../controllers/authController";
 import { validateLogin, validateRegistration } from "../middleware/validation";
 
@@ -16,7 +18,7 @@ router.post(
   "/login",
   validateLogin,
   passport.authenticate("local", { session: false }),
-  localCallback
+  login
 );
 
 router.get(
@@ -31,5 +33,9 @@ router.get(
 );
 
 router.post("/logout", logout);
+
+router.get("/me", me);
+
+router.post("/refresh-token", refreshToken);
 
 export default router;
